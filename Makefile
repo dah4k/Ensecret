@@ -18,6 +18,10 @@ test: ## dotnet test
 	dotnet test
 	dotnet run --project Cmd
 
+.PHONY: fmt
+fmt: ## run fantomas formatter
+	find . -type f -name "*.fs" -not -path "*obj*" | xargs dotnet fantomas
+
 .PHONY: clean
 clean: ## dotnet clean
 	dotnet clean
