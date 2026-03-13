@@ -1,0 +1,1 @@
+from Scriptlet.Test embedded resource file!

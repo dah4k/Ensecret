@@ -22,4 +22,10 @@ SPDX-License-Identifier: EPL-2.0
     <Compile Include="Tests.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Files/greetings.txt">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

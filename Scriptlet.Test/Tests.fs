@@ -10,3 +10,7 @@ open Xunit
 let ``Say Hello`` () =
     Hello "World!"
     Assert.True(true)
+
+[<Fact>]
+let ``Embedded resource file is not empty`` () =
+    Assert.NotEmpty(LoadEmbeddedFile("Files/greetings.txt"))
