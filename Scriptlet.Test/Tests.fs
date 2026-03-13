@@ -18,3 +18,15 @@ let ``Embedded resource file is not empty`` () =
 [<Fact>]
 let ``Embedded resource file is from us`` () =
     Assert.Matches("^from Scriptlet.Test", LoadEmbeddedFile("Files/greetings.txt"))
+
+[<Fact>]
+let ``UploadFile result contains HEREDOC`` () =
+    Assert.Matches("HEREDOC", UploadFile("Files/greetings.txt", "/tmp/test.txt"))
+
+[<Fact>]
+let ``UploadFileWithChangeMode result contains chmod`` () =
+    Assert.Matches("chmod", UploadFile("Files/greetings.txt", "/tmp/test.txt"))
+
+[<Fact>]
+let ``InstallSystemdService result contains daemon-reload`` () =
+    Assert.Matches("daemon-reload", UploadFile("Files/greetings.txt", "/tmp/test.txt"))
