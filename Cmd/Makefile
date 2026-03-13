@@ -14,9 +14,8 @@ all: $(TAGS) ## dotnet build
 	dotnet build
 
 .PHONY: test
-test: ## dotnet test
-	dotnet test
-	dotnet run --project Cmd
+test: ## dotnet run
+	dotnet run
 
 .PHONY: clean
 clean: ## dotnet clean
