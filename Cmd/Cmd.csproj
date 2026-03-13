@@ -16,4 +16,10 @@ SPDX-License-Identifier: EPL-2.0
     <ProjectReference Include="../Scriptlet/Scriptlet.fsproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Files/greetings.txt">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

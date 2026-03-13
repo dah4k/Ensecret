@@ -1,0 +1,1 @@
+from Ensecret.Cmd embedded resource file!

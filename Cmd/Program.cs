@@ -10,5 +10,6 @@ class Program
     static void Main(string[] args)
     {
         Hello("World!");
+        Hello(LoadEmbeddedFile("Files/greetings.txt"));
     }
 }
