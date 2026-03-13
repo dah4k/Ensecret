@@ -14,3 +14,7 @@ let ``Say Hello`` () =
 [<Fact>]
 let ``Embedded resource file is not empty`` () =
     Assert.NotEmpty(LoadEmbeddedFile("Files/greetings.txt"))
+
+[<Fact>]
+let ``Embedded resource file is from us`` () =
+    Assert.Matches("^from Scriptlet.Test", LoadEmbeddedFile("Files/greetings.txt"))
