@@ -1,0 +1,73 @@
+# Copyright 2026 dah4k
+# SPDX-License-Identifier: EPL-2.0
+
+FROM opensuse/leap:16.0
+
+## Restore man-pages and other documentation for Tumbleweed and/or Leap 16.0
+RUN rpm --erase zypp-excludedocs \
+ || sed -i 's/^rpm.install.excludedocs.*/rpm.install.excludedocs = no/' /etc/zypp/zypp.conf
+
+## Install packages
+RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc \
+ && zypper addrepo --check --refresh --gpgcheck-strict \
+        'https://packages.microsoft.com/sles/15/prod/' packages-microsoft-com-prod \
+ && zypper --non-interactive --quiet install \
+    --auto-agree-with-licenses --no-recommends \
+        b3sum \
+        coreutils-doc \
+        curl \
+        diffutils \
+        dotnet-sdk-10.0 \
+        dust \
+        fd \
+        fdupes \
+        git \
+        make \
+        man \
+        man-pages \
+        man-pages-posix \
+        patch \
+        ripgrep \
+        tree \
+        vim \
+        vim-data \
+ && zypper clean \
+ && rm -rf /var/cache/zypp/*
+
+## Create user
+ARG USERNAME=devops
+RUN groupadd --gid 1000 ${USERNAME} \
+ && useradd --create-home --home-dir /home/${USERNAME} --uid 1000 --gid 1000 ${USERNAME}
+
+USER ${USERNAME}
+
+WORKDIR /home/${USERNAME}
+
+## Disable .NET telemetry
+## https://learn.microsoft.com/en-us/dotnet/core/tools/telemetry#how-to-opt-out
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+## Disable .NET Interactive telemetry
+## https://github.com/dotnet/interactive#how-to-opt-out
+ENV DOTNET_INTERACTIVE_CLI_TELEMETRY_OPTOUT=1
+
+## Install .NET tools
+RUN dotnet tool install --global paket \
+ && dotnet tool install --global fantomas \
+ && dotnet tool install --global dotnet-dump \
+ && dotnet tool install --global dotnet-sos
+
+## Install Pulumi
+## Similar to `curl -fsSL https://get.pulumi.com | sh` but with checksum verification
+ARG PULUMI_VERSION="3.226.0"
+ARG PULUMI_B3="23d53a74c8bf8abf82a47f27d74d43def4e69986857612a904dc0cfe5bb0da14"
+ARG PULUMI_TARBALL="pulumi-v${PULUMI_VERSION}-linux-x64.tar.gz"
+ARG PULUMI_URL="https://github.com/pulumi/pulumi/releases/download/v${PULUMI_VERSION}/${PULUMI_TARBALL}"
+ARG PULUMI_HOME="/home/${USERNAME}/.pulumi"
+RUN curl -L -O ${PULUMI_URL} \
+ && echo "${PULUMI_B3}  ${PULUMI_TARBALL}" | b3sum -c - \
+ && mkdir -p ${PULUMI_HOME}/bin \
+ && tar -xpzf ${PULUMI_TARBALL} --directory=${PULUMI_HOME}/bin --strip-components=1 \
+ && rm -f ${PULUMI_TARBALL}
+
+ENV PATH=${PULUMI_HOME}/bin:/home/${USERNAME}/.dotnet/tools:$PATH
