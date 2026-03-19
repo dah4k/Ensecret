@@ -3,6 +3,8 @@
 
 namespace Ensecret
 
+open System.Diagnostics
+open System.Linq
 open System.IO
 open System.Reflection
 open System.Text
@@ -12,8 +14,18 @@ module Scriptlet =
     let Hello (name: string) = printfn "Hello %s" name
 
 
+    // Modified from https://stackoverflow.com/questions/44659856/is-this-the-best-way-to-get-the-calling-assembly-in-windows-10-uwp
+    let GetParentAssemblies () =
+        let currentAssembly = Assembly.GetExecutingAssembly()
+        let st = new System.Diagnostics.StackTrace()
+
+        st.GetFrames()
+        |> Seq.map (fun x -> x.GetMethod().DeclaringType.GetTypeInfo().Assembly)
+        |> Seq.where (fun x -> x <> currentAssembly)
+
+
     let LoadEmbeddedFile (pathname: string) : string =
-        let assembly = Assembly.GetCallingAssembly()
+        let assembly = GetParentAssemblies() |> Seq.head
         let name = assembly.GetName().Name
 
         use stream =
