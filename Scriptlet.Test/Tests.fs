@@ -25,8 +25,8 @@ let ``UploadFile result contains HEREDOC`` () =
 
 [<Fact>]
 let ``UploadFileWithChangeMode result contains chmod`` () =
-    Assert.Matches("chmod", UploadFile("Files/greetings.txt", "/tmp/test.txt"))
+    Assert.Matches("chmod", UploadFileWithChangeMode("Files/greetings.txt", "/tmp/test.txt", "640"))
 
 [<Fact>]
 let ``InstallSystemdService result contains daemon-reload`` () =
-    Assert.Matches("daemon-reload", UploadFile("Files/greetings.txt", "/tmp/test.txt"))
+    Assert.Matches("daemon-reload", InstallSystemdService("Files/greetings.txt"))
