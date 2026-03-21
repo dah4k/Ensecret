@@ -17,7 +17,7 @@ let ``Embedded resource file is not empty`` () =
 
 [<Fact>]
 let ``Embedded resource file is from us`` () =
-    Assert.Matches("^from Scriptlet.Test", LoadEmbeddedFile("Files/greetings.txt"))
+    Assert.Matches("^from Scriptlet.Tests", LoadEmbeddedFile("Files/greetings.txt"))
 
 [<Fact>]
 let ``UploadFile result contains HEREDOC`` () =
