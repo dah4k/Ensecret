@@ -30,3 +30,30 @@ let ``UploadFileWithChangeMode result contains chmod`` () =
 [<Fact>]
 let ``InstallSystemdService result contains daemon-reload`` () =
     Assert.Matches("daemon-reload", InstallSystemdService("Files/greetings.txt"))
+
+[<Fact>]
+// Reference: https://github.com/dotnet/fsharp/issues/13995
+let ``Indentation aware raw string literals (similar to C# 11) #13995`` () =
+    let htmlString1 =
+        """<!DOCTYPE html>
+<html lang="en">
+    <head>
+    </head>
+    <body>
+        <h1>Hello</h1>
+     </body>
+</html>"""
+
+    let htmlString2 =
+        """
+        <!DOCTYPE html>
+        <html lang="en">
+            <head>
+            </head>
+            <body>
+                <h1>Hello</h1>
+             </body>
+        </html>
+        """
+
+    Assert.Equal(htmlString1, htmlString2)
