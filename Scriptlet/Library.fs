@@ -13,6 +13,7 @@ module Scriptlet =
 
     let Hello (name: string) = printfn "Hello %s" name
 
+    let deindent (textBlock: string) : string = textBlock
 
     // Modified from https://stackoverflow.com/questions/44659856/is-this-the-best-way-to-get-the-calling-assembly-in-windows-10-uwp
     let GetParentAssemblies () =
@@ -43,6 +44,7 @@ module Scriptlet =
         {{LoadEmbeddedFile(localPath)}}
         END_OF_HEREDOC_UPLOAD_FILE
         """
+        |> deindent
 
 
     let UploadFileWithChangeMode (localPath: string, remotePath: string, mode: string) : string =
@@ -51,6 +53,7 @@ module Scriptlet =
 
         sudo chmod {{mode}} {{remotePath}}
         """
+        |> deindent
 
 
     let InstallSystemdService (localServicePath: string) : string =
@@ -64,3 +67,4 @@ module Scriptlet =
         sudo systemctl enable {{serviceName}}
         sudo systemctl start {{serviceName}}
         """
+        |> deindent
