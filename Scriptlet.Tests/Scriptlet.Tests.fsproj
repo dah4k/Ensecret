@@ -19,7 +19,8 @@ SPDX-License-Identifier: EPL-2.0
 
   <ItemGroup>
     <ProjectReference Include="../Scriptlet/Scriptlet.fsproj" />
-    <Compile Include="Tests.fs" />
+    <Compile Include="API.fs" />
+    <Compile Include="deindent.fs" />
   </ItemGroup>
 
   <ItemGroup>
