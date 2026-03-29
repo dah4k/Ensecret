@@ -1,7 +1,7 @@
 ﻿// Copyright 2026 dah4k
 // SPDX-License-Identifier: EPL-2.0
 
-module Tests.API
+module Ensecret.Tests.API
 
 open Ensecret.Scriptlet
 open Xunit
