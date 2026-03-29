@@ -24,16 +24,15 @@ let extractIndentationPrefix (lines: string seq) : string =
     if lastLine = prefix then prefix else ""
 
 let trimIndent (prefix: string, line: string) : string =
-    if prefix = String.Empty then
-        line
-    elif line = String.Empty then
-        line
-    elif line.StartsWith(prefix) then
-        line.Remove(0, prefix.Length)
-    else
-        // This should be invalidArg "ERROR: trimIndent on outdented line".
-        // Workaround to recover using String.TrimStart() for now...
-        line.TrimStart()
+    let (|StartPrefix|_|) (s: string) =
+        if s.StartsWith(prefix) then Some StartPrefix else None
+
+    match line with
+    | "" -> ""
+    | StartPrefix -> line.Remove(0, prefix.Length)
+    // This should be invalidArg "ERROR: trimIndent on outdented line".
+    // Best effort trying to recover using String.TrimStart()...
+    | _ -> line.TrimStart()
 
 let trimEnclosingNewlines (textBlock: string) : string = textBlock
 
