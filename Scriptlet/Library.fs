@@ -34,7 +34,28 @@ let trimIndent (prefix: string, line: string) : string =
     // Best effort trying to recover using String.TrimStart()...
     | _ -> line.TrimStart()
 
-let trimEnclosingNewlines (textBlock: string) : string = textBlock
+let trimEnclosingNewlines (textBlock: string) : string =
+    let (|OneNewline|_|) (s: string) =
+        if s = $"{NEWLINE_CHARACTER}" then Some OneNewline else None
+
+    let (|StartNewline|_|) (s: string) =
+        if s.StartsWith(NEWLINE_CHARACTER) then
+            Some StartNewline
+        else
+            None
+
+    let (|EndNewline|_|) (s: string) =
+        if s.EndsWith(NEWLINE_CHARACTER) then
+            Some EndNewline
+        else
+            None
+
+    match textBlock with
+    | OneNewline -> ""
+    | StartNewline & EndNewline -> textBlock.Substring(1, textBlock.Length - 2)
+    | StartNewline -> textBlock.Substring(1, textBlock.Length - 1)
+    | EndNewline -> textBlock.Substring(0, textBlock.Length - 1)
+    | _ -> textBlock
 
 let deindent (textBlock: string) : string =
     let textLines = textBlock.Split NEWLINE_CHARACTER
