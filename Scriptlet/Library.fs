@@ -16,11 +16,12 @@ module Scriptlet =
 
     let INDENTATION_CHARACTER = '\x20' // ASCII space character
 
-    let extractIndentationPrefix (line: string) : string =
-        let n = line.Length
+    let extractIndentationPrefix (lines: string seq) : string =
+        let lastLine = lines |> Seq.last
+        let n = lastLine.Length
         let prefix = new String(INDENTATION_CHARACTER, n)
 
-        if line = prefix then prefix else String.Empty
+        if lastLine = prefix then prefix else ""
 
     let trimIndent (prefix: string, line: string) : string =
         if prefix = String.Empty then
@@ -38,7 +39,7 @@ module Scriptlet =
 
     let deindent (textBlock: string) : string =
         let textLines = textBlock.Split '\n'
-        let prefix = textLines |> Seq.last |> extractIndentationPrefix
+        let prefix = extractIndentationPrefix textLines
 
         textLines
         |> Seq.map (fun x -> trimIndent (prefix, x))
