@@ -14,6 +14,8 @@ let Hello (name: string) = printfn "Hello %s" name
 
 let INDENTATION_CHARACTER = '\x20' // ASCII space character
 
+let NEWLINE_CHARACTER = '\n'
+
 let extractIndentationPrefix (lines: string seq) : string =
     let lastLine = lines |> Seq.last
     let n = lastLine.Length
@@ -36,12 +38,12 @@ let trimIndent (prefix: string, line: string) : string =
 let trimEnclosingNewlines (textBlock: string) : string = textBlock
 
 let deindent (textBlock: string) : string =
-    let textLines = textBlock.Split '\n'
+    let textLines = textBlock.Split NEWLINE_CHARACTER
     let prefix = extractIndentationPrefix textLines
 
     textLines
     |> Seq.map (fun x -> trimIndent (prefix, x))
-    |> Seq.reduce (fun x y -> x + "\n" + y)
+    |> String.concat $"{NEWLINE_CHARACTER}"
     |> trimEnclosingNewlines
 
 
