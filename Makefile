@@ -27,5 +27,5 @@ clean: ## dotnet clean
 	dotnet clean
 
 .PHONY: distclean
-distclean: clean ## make clean && rm -rf bin obj
-	rm -rf bin obj
+distclean: clean ## make clean && rm -rf */{bin,obj}
+	rm -rf */{bin,obj}
