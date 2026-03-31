@@ -1,0 +1,14 @@
+// Copyright 2026 dah4k
+// SPDX-License-Identifier: MIT-0
+
+= Ensecret
+
+[quote, Wikipedia, https://fr.wikipedia.org/wiki/Ensecret]
+____
+L'**ensecret** ou **ensecrètement** est la technique permettant de relier une
+https://fr.wikipedia.org/wiki/Marionnette_%C3%A0_fils[marionnette à fils]
+à son contrôle, ou croix d'attelle,
+par des fils en équilibrant le fantoche
+afin qu'il se déplace harmonieusement.
+____
+
