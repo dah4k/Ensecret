@@ -1,0 +1,94 @@
+@startuml
+// Copyright 2026 dah4k
+// SPDX-License-Identifier: EPL-2.0
+// !include <logos/docusaurus.puml>
+// !include <logos/gitlab.puml>
+// !include <logos/gopher.puml>
+// !include <logos/xwiki-icon.puml>
+// !include <logos/zulip-icon.puml>
+// !include <office/Devices/ip_gateway.puml>
+// !include <office/Devices/router.puml>
+// !include <office/Devices/workstation.puml>
+// !include <office/Devices/workstation_pc.puml>
+// !include <office/Servers/application_server.puml>
+// !include <office/Servers/database_server.puml>
+// !include <office/Servers/domain_controller.puml>
+// !include <office/Servers/exchange_2013_server.puml>
+// !include <office/Servers/file_server.puml>
+// !include <office/Servers/windows_server.puml>
+// !include <office/Services/email_service.puml>
+// !include <office/Services/network_file_share_service.puml>
+// !include <office/Services/user_services.puml>
+// !include <office/Sites/website_public.puml>
+// !include <office/Sites/wiki_site.puml>
+!include <tupadr3/devicons2/archlinux.puml>
+// !include <tupadr3/devicons2/redhat.puml>
+// !include <tupadr3/devicons2/gitbook_original.puml>
+// !include <tupadr3/devicons2/linux.puml>
+// !include <tupadr3/devicons2/markdown_original.puml>
+// !include <tupadr3/devicons2/readthedocs_original.puml>
+!include <tupadr3/devicons2/rockylinux_original.puml>
+!include <tupadr3/font-awesome/server.puml>
+!include <tupadr3/font-awesome/fort_awesome.puml>
+!include <tupadr3/font-awesome-5/desktop.puml>
+!include <tupadr3/font-awesome-5/gitlab.puml>
+!include <tupadr3/font-awesome-6/debian.puml>
+!include <tupadr3/font-awesome-6/file.puml>
+!include <tupadr3/font-awesome-6/money_check_dollar.puml>
+!include <tupadr3/font-awesome-6/opensuse.puml>
+!include <tupadr3/font-awesome-6/ubuntu.puml>
+!include <tupadr3/font-awesome-6/redhat.puml>
+!include <tupadr3/material/chat.puml>
+!include <tupadr3/material/email.puml>
+!include <tupadr3/material/library_books.puml>
+nwdiag {
+
+    network CORP {
+        address = "10.0.1.0/24"
+
+        GATEWAY [ address = "10.0.1.1" ]
+
+        // https://github.com/frappe/hrms/
+        hrms    [ description = "<$money_check_dollar>\nHRMS\n(Frappe)" ]
+
+        // https://github.com/mjl-/mox/
+        email   [ description = "<$email>\nEmail\n(Mox)" ]
+
+        // https://github.com/xwiki/xwiki-platform/
+        doc     [ description = "<$library_books>\nDoc\n(XWiki)" ]
+
+        // https://github.com/zulip/zulip/
+        chat    [ description = "<$chat>\nChat\n(Zulip)" ]
+
+        // https://github.com/filesender/filesender/
+        file    [ description = "<$file>\nFile\n(FileSender)" ]
+
+        // https://docs.gitlab.com/topics/offline/quick_start_guide/
+        gitlab  [ description = "<$gitlab>\nGitlab" ]
+
+        arch    [ description = "<$archlinux>\nArch Linux\n2026.03.01" ]
+        debian  [ description = "<$debian>\nDebian 13\nTrixie" ]
+        opensuse[ description = "<$opensuse>\nopenSUSE\nLeap 16.0" ]
+        rocky   [ description = "<$rockylinux_original>\nRocky Linux\n10.1" ]
+        ubuntu  [ description = "<$ubuntu>\nUbuntu\n24.04" ]
+    }
+
+    network BLUE {
+        address = "10.100.1.0/24"
+
+        GATEWAY [ address = "10.100.1.1" ]
+
+        velo    [ description = "<$server>\nVelociraptor" ]
+        analyst [ description = "<$desktop>\nAnalyst" ]
+    }
+
+    network RED {
+        address = "10.200.1.0/24"
+
+        GATEWAY [ address = "10.200.1.1" ]
+
+        kali [ description = "<$desktop>\nKali Linux" ]
+    }
+
+}
+@enduml
