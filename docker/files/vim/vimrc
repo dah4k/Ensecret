@@ -1,0 +1,215 @@
+" Copyright 2026 dah4k
+" SPDX-License-Identifier: EPL-2.0
+
+" 0: IBM Model M 101-key ANSI layout
+" 1: Microsoft Natural 4000
+" 2: Microsoft/Incase LXM-00001
+let b:ergonomic_keyboard=2
+
+call plug#begin(expand('~/.vim/plugged'))
+Plug 'dracula/vim', { 'as': 'vim-dracula' }
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+Plug 'ionide/Ionide-vim', {
+    \ 'do': 'dotnet tool install --global fsautocomplete',
+    \ }
+call plug#end()
+
+filetype plugin indent on
+
+set nocompatible
+set tabstop=4
+set softtabstop=0
+set shiftwidth=4
+
+" Must enable visual bell to disable *beeping* audio bell...
+set noerrorbells visualbell t_vb=
+
+" Diable Netrw history
+let g:netrw_dirhistmax=0
+
+" Disable undofile, Vim history, swapfile, and backup
+set noundofile viminfo=
+set noswapfile
+set nobackup
+
+" Search for tags in current and parent directories
+set tags=tags,../tags,../../tags,../../../tags
+
+set ruler
+set number
+set list listchars=tab:.\ ,trail:.
+set laststatus=2
+set statusline=%F:%l:%c\ %m%r%=%l\/%L\ (%P)
+
+syntax clear
+syntax on
+set background=dark
+
+if ($COLORTERM == 'truecolor' || $COLORTERM == '24bit')
+    " Enable 24-bit color
+    " Reference: https://gist.github.com/XVilka/8346728
+    set termguicolors
+elseif has('termguicolors')
+    " vim:help xterm-true-color
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
+else
+    " Fallback to 256-color palette
+    set t_Co=256
+    " Disable Background Color Erase to avoid background bleeding
+    " on 256-color palette Tmux and GNU Screen.
+    " Reference: https://sunaku.github.io/vim-256color-bce.html
+    set t_ut=
+endif
+
+" Use Dracula theme
+colorscheme dracula
+
+" Override Vim `listchars` SpecialKey to be less distracting Comment color
+highlight! link SpecialKey Comment
+
+set hlsearch
+set textwidth=79
+set colorcolumn=+1,+21
+
+" `formatoptions` (default was "tcq"). See `fo-table` for option description.
+"  -t   *DISABLE* Auto-wrap text using textwidth
+"  -c   *DISABLE* Auto-wrap comments using textwidth,
+"       inserting the current comment leader automatically.
+"  -q   Allow formatting of comments with "gq".
+"  -1   Don't break a line after a one-letter word.  It's broken before it
+"       instead (if possible).
+"  -j   Where it makes sense, remove a comment leader when joining lines.
+set formatoptions=q1j
+
+" Override default colors to DraculaSelection (guibg=#44475a)
+"   256-color palette | 16-color -> ctermbg := DarkGray
+"   24-bit color | true color -> guibg := some blueish gray (DraculaSelection)
+highlight! link ColorColumn DraculaSelection
+highlight! link StatusLine DraculaSelection
+
+" Override default CursorLine colors to Dracula, but only enable CursorLineNr color
+highlight! link CursorLine DraculaSelection
+highlight! link CursorLineNr DraculaYellow
+set cursorline
+set cursorlineopt=number
+
+" More readable long text lines (Note: one escape space and one space separator)
+set wrap
+set showbreak=>>>\  linebreak
+noremap j gj
+noremap k gk
+noremap H g0
+noremap L g$
+
+" Reference: https://vim.fandom.com/wiki/Fix_syntax_highlighting
+if (b:ergonomic_keyboard == 2)
+    noremap  <F5> <Esc>:syntax clear <Bar> syntax on<CR>
+    noremap  <F6> <Esc>:syntax sync fromstart<CR>
+    inoremap <F6> <C-o>:syntax sync fromstart<CR>
+elseif (b:ergonomic_keyboard == 1)
+    noremap  <F4> <Esc>:syntax clear <Bar> syntax on<CR>
+    noremap  <F5> <Esc>:syntax sync fromstart<CR>
+    inoremap <F5> <C-o>:syntax sync fromstart<CR>
+else
+    noremap  <F3> <Esc>:syntax clear <Bar> syntax on<CR>
+    noremap  <F4> <Esc>:syntax sync fromstart<CR>
+    inoremap <F4> <C-o>:syntax sync fromstart<CR>
+endif
+
+if &diff
+    set diffopt+=filler
+    set diffopt+=iwhite
+    set diffopt+=horizontal
+    if (b:ergonomic_keyboard == 2)
+        map <F7> [czz
+        map <F8> ]czz
+        map <F9> dp
+        map <F10> do
+    elseif (b:ergonomic_keyboard == 1)
+        map <F6> [czz
+        map <F7> ]czz
+        map <F8> dp
+        map <F9> do
+    else
+        map <F5> [czz
+        map <F6> ]czz
+        map <F7> dp
+        map <F8> do
+    endif
+else
+    if (b:ergonomic_keyboard == 2)
+        map <F7> :bprevious <CR>
+        map <F8> :bnext <CR>
+        map <F9> :cprevious <CR>
+        map <F10> :cnext <CR>
+    elseif (b:ergonomic_keyboard == 1)
+        map <F6> :bprevious <CR>
+        map <F7> :bnext <CR>
+        map <F8> :cprevious <CR>
+        map <F9> :cnext <CR>
+    else
+        map <F5> :bprevious <CR>
+        map <F6> :bnext <CR>
+        map <F7> :cprevious <CR>
+        map <F8> :cnext <CR>
+    endif
+endif
+
+function! TrimWhitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfunction
+
+augroup MY_AUTO
+    autocmd!
+    autocmd BufRead,BufNewFile gitconfig.*,gitconfig-*      setfiletype gitconfig
+    autocmd BufRead,BufNewFile Dockerfile.*,Dockerfile-*    setfiletype dockerfile
+    autocmd BufRead,BufNewFile *strace                      setfiletype strace
+    autocmd BufRead,BufNewFile *.puml                       setfiletype c
+    autocmd BufRead rfc*.txt setlocal filetype=rfc
+
+    " Auto-delete trailing whitespaces on save
+    autocmd BufWritePre * call TrimWhitespace()
+
+    " Auto-Reload after editing Vim config
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+augroup END
+
+" Always expand tabs, except for Makefiles or gitconfig
+set expandtab
+augroup make
+    autocmd Syntax make set noexpandtab
+augroup END
+augroup gitconfig
+    autocmd Syntax gitconfig set tabstop=8 | set shiftwidth=8 | set noexpandtab
+augroup END
+
+" Rust style guide and `rustfmt` set max line width to 100 chars.
+" But I still want comment block to be formatted within 80 chars.
+" Overriding Vim Rust `textwidth=99`, and adding column #100 highlight.
+" https://github.com/nrc/rfcs/blob/style-guide/style-guide/README.md#formatting-conventions
+augroup rust
+    autocmd Syntax rust set textwidth=79 | set colorcolumn=+1,+21
+augroup END
+
+" Minimal number of screen lines to keep above and below the cursor.
+set scrolloff=5
+
+" Fix Non-intuitive H-split and V-split for new Vim window
+set splitbelow splitright
+
+" Reduce file pollution named "1"
+cnoreabbrev w1 w!
+
+" Open help in new Fullscreen window tab
+cnoreabbrev h tab help
+
+" Open help in vertical split (default :help is horizontal split)
+cnoreabbrev vh vertical help
+

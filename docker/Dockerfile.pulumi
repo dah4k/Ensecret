@@ -21,7 +21,10 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc \
         dust \
         fd \
         fdupes \
+        file \
+        findutils \
         git \
+        helix \
         make \
         man \
         man-pages \
@@ -70,4 +73,9 @@ RUN curl -L -O ${PULUMI_URL} \
  && tar -xpzf ${PULUMI_TARBALL} --directory=${PULUMI_HOME}/bin --strip-components=1 \
  && rm -f ${PULUMI_TARBALL}
 
-ENV PATH=${PULUMI_HOME}/bin:/home/${USERNAME}/.dotnet/tools:$PATH
+COPY --chown=1000:1000 docker/files/bashrc  /home/${USERNAME}/.bashrc
+COPY --chown=1000:1000 docker/files/alias   /home/${USERNAME}/.alias
+COPY --chown=1000:1000 docker/files/vim/    /home/${USERNAME}/.vim/
+
+ENV PATH=${PULUMI_HOME}/bin:/home/${USERNAME}/.dotnet/tools:$PATH \
+    LANG=C.UTF-8

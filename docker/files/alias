@@ -1,0 +1,43 @@
+# Copyright 2026 dah4k
+# SPDX-License-Identifier: MIT-0
+
+unalias -a
+
+alias ..="cd .."
+alias -- +="pushd ."
+alias -- -="popd"
+alias date="LC_TIME=en_GB.UTF-8 date"
+
+alias la="ls -Altr"
+alias ls="ls -F --color=auto"
+alias rg="rg --sort path"
+alias v="vim -R"
+
+alias d='dotnet'
+alias db='dotnet build'
+alias dr='dotnet run'
+alias dt='dotnet test'
+alias fsi='dotnet fsi'
+
+alias gcd="git checkout"
+alias gci="git commit"
+alias gdf="git diff"
+alias gst="git status"
+
+# Fix distros calling `fdfind`
+# Reference: https://github.com/sharkdp/fd/
+alias fd='_fd(){
+    if $(which fdfind 2>/dev/null); then
+        fdfind "$@";
+    else fd "$@";
+    fi;
+};_fd'
+
+# Fix ERROR: XMLRPC request failed [code: -32500]
+# Reference: https://github.com/victorgarric/pip_search/
+alias pip='_pip(){
+    if [ $1 = "search" ]; then
+        pip_search --date_format "%Y-%m-%d" "$2";
+    else pip "$@";
+    fi;
+};_pip'
