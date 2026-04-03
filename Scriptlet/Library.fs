@@ -16,14 +16,14 @@ let INDENTATION_CHARACTER = '\x20' // ASCII space character
 
 let NEWLINE_CHARACTER = '\n'
 
-let extractIndentationPrefix (lines: string seq) : string =
+let private extractIndentationPrefix (lines: string seq) : string =
     let lastLine = lines |> Seq.last
     let n = lastLine.Length
     let prefix = new String(INDENTATION_CHARACTER, n)
 
     if lastLine = prefix then prefix else ""
 
-let trimIndent (prefix: string, line: string) : string =
+let private trimIndent (prefix: string, line: string) : string =
     let (|StartPrefix|_|) (s: string) =
         if s.StartsWith(prefix) then Some StartPrefix else None
 
@@ -34,7 +34,7 @@ let trimIndent (prefix: string, line: string) : string =
     // Best effort trying to recover using String.TrimStart()...
     | _ -> line.TrimStart()
 
-let trimEnclosingNewlines (textBlock: string) : string =
+let private trimEnclosingNewlines (textBlock: string) : string =
     let (|OneNewline|_|) (s: string) =
         if s = $"{NEWLINE_CHARACTER}" then Some OneNewline else None
 
