@@ -94,3 +94,77 @@ let ``TC.1.511 - DecodeTextFromBase64 "YWJjZA==" returns "abcd"`` () =
     let actual = "YWJjZA==" |> DecodeTextFromBase64
 
     Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.520 - GzipText empty string`` () =
+    let expected = "H4sIAAAAAAAAAwMAAAAAAAAAAAA="
+    let actual = "" |> GzipText |> System.Convert.ToBase64String
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.521 - GzipText "abcd"`` () =
+    let expected = "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA"
+    let actual = "abcd" |> GzipText |> System.Convert.ToBase64String
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.530 - GunzipBytes "H4sIAAAAAAAAAwMAAAAAAAAAAAA="`` () =
+    let expected = ""
+
+    let actual =
+        "H4sIAAAAAAAAAwMAAAAAAAAAAAA=" |> System.Convert.FromBase64String |> GunzipBytes
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.531 - GunzipBytes "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA"`` () =
+    let expected = "abcd"
+
+    let actual =
+        "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA"
+        |> System.Convert.FromBase64String
+        |> GunzipBytes
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.540 - Empty string |> GzipText |> GunzipBytes`` () =
+    let expected = ""
+    let actual = expected |> GzipText |> GunzipBytes
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.541 - "abcd" |> GzipText |> GunzipBytes`` () =
+    let expected = "abcd"
+    let actual = expected |> GzipText |> GunzipBytes
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.550 - "H4sIAAAAAAAAAwMAAAAAAAAAAAA=" |> GunzipBytes |> GzipText`` () =
+    let expected = "H4sIAAAAAAAAAwMAAAAAAAAAAAA="
+
+    let actual =
+        expected
+        |> System.Convert.FromBase64String
+        |> GunzipBytes
+        |> GzipText
+        |> System.Convert.ToBase64String
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.551 - "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA" |> GunzipBytes |> GzipText`` () =
+    let expected = "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA"
+
+    let actual =
+        expected
+        |> System.Convert.FromBase64String
+        |> GunzipBytes
+        |> GzipText
+        |> System.Convert.ToBase64String
+
+    Assert.Equal(expected, actual)
