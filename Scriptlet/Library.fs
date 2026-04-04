@@ -6,6 +6,7 @@ module Ensecret.Scriptlet
 open System.Diagnostics
 open System.Linq
 open System.IO
+open System.IO.Compression
 open System.Reflection
 open System.Text
 open System
@@ -96,6 +97,12 @@ let DecodeTextFromBase64 (encodedText: string) : string =
     encodedText
     |> System.Convert.FromBase64String
     |> System.Text.Encoding.UTF8.GetString
+
+
+let GzipText (plainText: string) : byte[] = [||]
+
+
+let GunzipBytes (bytes: byte[]) : string = ""
 
 
 let UploadFile (localPath: string, remotePath: string) : string =
