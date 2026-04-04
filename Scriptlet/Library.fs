@@ -88,6 +88,16 @@ let LoadEmbeddedFile (pathname: string) : string =
     streamReader.ReadToEnd()
 
 
+let EncodeTextToBase64 (plainText: string) : string =
+    plainText |> System.Text.Encoding.UTF8.GetBytes |> System.Convert.ToBase64String
+
+
+let DecodeTextFromBase64 (encodedText: string) : string =
+    encodedText
+    |> System.Convert.FromBase64String
+    |> System.Text.Encoding.UTF8.GetString
+
+
 let UploadFile (localPath: string, remotePath: string) : string =
     $$"""
     sudo mkdir --parents ${dirname {{remotePath}}}

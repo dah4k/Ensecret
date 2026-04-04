@@ -66,3 +66,31 @@ let ``TC.1.400 - Indentation aware raw string literals (similar to C# 11) #13995
         |> deindent
 
     Assert.Equal(htmlString1, htmlString2)
+
+[<Fact>]
+let ``TC.1.500 - EncodeTextToBase64 empty string returns empty string`` () =
+    let expected = ""
+    let actual = "" |> EncodeTextToBase64
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.501 - EncodeTextToBase64 "abcd" returns "YWJjZA=="`` () =
+    let expected = "YWJjZA=="
+    let actual = "abcd" |> EncodeTextToBase64
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.510 - DecodeTextFromBase64 empty string returns empty string`` () =
+    let expected = ""
+    let actual = "" |> DecodeTextFromBase64
+
+    Assert.Equal(expected, actual)
+
+[<Fact>]
+let ``TC.1.511 - DecodeTextFromBase64 "YWJjZA==" returns "abcd"`` () =
+    let expected = "abcd"
+    let actual = "YWJjZA==" |> DecodeTextFromBase64
+
+    Assert.Equal(expected, actual)
