@@ -99,10 +99,24 @@ let DecodeTextFromBase64 (encodedText: string) : string =
     |> System.Text.Encoding.UTF8.GetString
 
 
-let GzipText (plainText: string) : byte[] = [||]
+// Modified from https://ssojet.com/compression/compress-files-with-gzip-in-f/
+let GzipText (plainText: string) : byte[] =
+    use outStream = new MemoryStream()
+    use gzStream = new GZipStream(outStream, CompressionMode.Compress)
+    use inStream = new StreamWriter(gzStream, Encoding.UTF8)
+    inStream.Write(plainText)
+    inStream.Flush()
+    gzStream.Flush()
+    //gzStream.Close()
+    outStream.ToArray()
 
 
-let GunzipBytes (bytes: byte[]) : string = ""
+// Modified from https://ssojet.com/compression/compress-files-with-gzip-in-f/
+let GunzipBytes (bytes: byte[]) : string =
+    use inStream = new MemoryStream(bytes)
+    use gzStream = new GZipStream(inStream, CompressionMode.Decompress)
+    use outStream = new StreamReader(gzStream, Encoding.UTF8)
+    outStream.ReadToEnd()
 
 
 let UploadFile (localPath: string, remotePath: string) : string =
