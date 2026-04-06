@@ -1,0 +1,10 @@
+# Copyright 2026 dah4k
+# SPDX-License-Identifier: MIT-0
+
+[*.{fs,fsi,fsx}]
+# Default is 120
+max_line_length = 120
+# Default is false
+fsharp_space_before_colon = false
+# Default is cramped in v7, aligned in v8-alpha
+fsharp_multiline_bracket_style = aligned
