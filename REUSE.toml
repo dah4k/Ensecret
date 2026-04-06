@@ -1,0 +1,13 @@
+version = 1
+SPDX-PackageName = "Ensecret"
+SPDX-PackageSupplier = "dah4k <84741290+dah4k@users.noreply.github.com>"
+SPDX-PackageDownloadLocation = "https://github.com/dah4k/Ensecret/"
+
+[[annotations]]
+path = [
+    "**/greetings.txt",
+    "**/*.json",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 dah4k"
+SPDX-License-Identifier = "EPL-2.0"
