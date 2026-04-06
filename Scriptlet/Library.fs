@@ -99,15 +99,13 @@ let DecodeTextFromBase64 (encodedText: string) : string =
     |> System.Text.Encoding.UTF8.GetString
 
 
-// Modified from https://ssojet.com/compression/compress-files-with-gzip-in-f/
+// Modified from https://khalidabuhakmeh.com/compress-strings-with-dotnet-and-csharp/
 let GzipText (plainText: string) : byte[] =
+    use inStream = new MemoryStream(Encoding.UTF8.GetBytes(plainText))
     use outStream = new MemoryStream()
     use gzStream = new GZipStream(outStream, CompressionMode.Compress)
-    use inStream = new StreamWriter(gzStream, Encoding.UTF8)
-    inStream.Write(plainText)
-    inStream.Flush()
-    gzStream.Flush()
-    //gzStream.Close()
+    inStream.CopyTo(gzStream)
+    gzStream.Close()
     outStream.ToArray()
 
 
