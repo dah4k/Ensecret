@@ -96,21 +96,21 @@ let ``TC.1.511 - DecodeTextFromBase64 "YWJjZA==" returns "abcd"`` () =
     Assert.Equal(expected, actual)
 
 [<Fact>]
-let ``TC.1.520 - GzipText empty string`` () =
+let ``TC.1.520 - "" |> GzipText |> ToBase64String`` () =
     let expected = "H4sIAAAAAAAAAwMAAAAAAAAAAAA="
     let actual = "" |> GzipText |> System.Convert.ToBase64String
 
     Assert.Equal(expected, actual)
 
 [<Fact>]
-let ``TC.1.521 - GzipText "abcd"`` () =
+let ``TC.1.521 - "abcd" |> GzipText |> ToBase64String`` () =
     let expected = "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA"
     let actual = "abcd" |> GzipText |> System.Convert.ToBase64String
 
     Assert.Equal(expected, actual)
 
 [<Fact>]
-let ``TC.1.530 - GunzipBytes "H4sIAAAAAAAAAwMAAAAAAAAAAAA="`` () =
+let ``TC.1.530 - "H4sIAAAAAAAAAwMAAAAAAAAAAAA=" |> FromBase64String |> GunzipBytes`` () =
     let expected = ""
 
     let actual =
@@ -119,7 +119,7 @@ let ``TC.1.530 - GunzipBytes "H4sIAAAAAAAAAwMAAAAAAAAAAAA="`` () =
     Assert.Equal(expected, actual)
 
 [<Fact>]
-let ``TC.1.531 - GunzipBytes "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA"`` () =
+let ``TC.1.531 - "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA" |> FromBase64String |> GunzipBytes`` () =
     let expected = "abcd"
 
     let actual =
@@ -130,7 +130,7 @@ let ``TC.1.531 - GunzipBytes "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA"`` () =
     Assert.Equal(expected, actual)
 
 [<Fact>]
-let ``TC.1.540 - Empty string |> GzipText |> GunzipBytes`` () =
+let ``TC.1.540 - "" |> GzipText |> GunzipBytes`` () =
     let expected = ""
     let actual = expected |> GzipText |> GunzipBytes
 
@@ -144,7 +144,7 @@ let ``TC.1.541 - "abcd" |> GzipText |> GunzipBytes`` () =
     Assert.Equal(expected, actual)
 
 [<Fact>]
-let ``TC.1.550 - "H4sIAAAAAAAAAwMAAAAAAAAAAAA=" |> GunzipBytes |> GzipText`` () =
+let ``TC.1.550 - "H4sIAAAAAAAAAwMAAAAAAAAAAAA=" |> FromBase64String |> GunzipBytes |> GzipText |> ToBase64String`` () =
     let expected = "H4sIAAAAAAAAAwMAAAAAAAAAAAA="
 
     let actual =
@@ -157,7 +157,7 @@ let ``TC.1.550 - "H4sIAAAAAAAAAwMAAAAAAAAAAAA=" |> GunzipBytes |> GzipText`` () 
     Assert.Equal(expected, actual)
 
 [<Fact>]
-let ``TC.1.551 - "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA" |> GunzipBytes |> GzipText`` () =
+let ``TC.1.551 - echo -n "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA" | base64 -d | gzip | gunzip | base64`` () =
     let expected = "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA"
 
     let actual =
