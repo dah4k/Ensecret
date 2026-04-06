@@ -22,11 +22,21 @@ public class UnitTest1
     }
 
     [Fact]
-    public void Test1()
+    public void GzipBase64_abcd_string()
     {
         // echo -n "abcd" | gzip | base64
         string expected = "H4sIAAAAAAAAA0tMSk4BABHNgu0EAAAA";
         string actual = System.Convert.ToBase64String(GzipText("abcd"));
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void GzipBase64_empty_string()
+    {
+        // echo -n "" | gzip | base64
+        string expected = "H4sIAAAAAAAAAwMAAAAAAAAAAAA=";
+        string actual = System.Convert.ToBase64String(GzipText(""));
 
         Assert.Equal(expected, actual);
     }
