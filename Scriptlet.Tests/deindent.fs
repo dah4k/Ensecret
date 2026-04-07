@@ -1,7 +1,7 @@
-﻿// Copyright 2026 dah4k
+// Copyright 2026 dah4k
 // SPDX-License-Identifier: EPL-2.0
 
-module Ensecret.Tests.deindent
+module Scriptlet.Tests.deindent
 
 open Ensecret.Scriptlet
 open Xunit
