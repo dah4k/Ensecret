@@ -101,12 +101,23 @@ let DecodeTextFromBase64 (encodedText: string) : string =
 
 // Modified from https://khalidabuhakmeh.com/compress-strings-with-dotnet-and-csharp/
 let GzipText (plainText: string) : byte[] =
-    use inStream = new MemoryStream(Encoding.UTF8.GetBytes(plainText))
-    use outStream = new MemoryStream()
-    use gzStream = new GZipStream(outStream, CompressionMode.Compress)
-    inStream.CopyTo(gzStream)
-    gzStream.Close()
-    outStream.ToArray()
+    // HACK: Workaround .NET 10 missing all Gzip blocks for empty byte array.
+    // See Also https://github.com/dotnet/runtime/issues/122928
+    if plainText = "" then
+        let gzipEmpty: byte[] =
+            [|
+                0x1Fuy; 0x8Buy; 0x08uy; 0x00uy; 0x00uy; 0x00uy; 0x00uy; 0x00uy;
+                0x00uy; 0x03uy; 0x03uy; 0x00uy; 0x00uy; 0x00uy; 0x00uy; 0x00uy;
+                0x00uy; 0x00uy; 0x00uy; 0x00uy
+            |]
+        gzipEmpty
+    else
+        use inStream = new MemoryStream(Encoding.UTF8.GetBytes(plainText))
+        use outStream = new MemoryStream()
+        use gzStream = new GZipStream(outStream, CompressionMode.Compress)
+        inStream.CopyTo(gzStream)
+        gzStream.Close()
+        outStream.ToArray()
 
 
 // Modified from https://ssojet.com/compression/compress-files-with-gzip-in-f/
