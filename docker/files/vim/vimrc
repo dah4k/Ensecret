@@ -8,10 +8,10 @@ let b:ergonomic_keyboard=2
 
 call plug#begin(expand('~/.vim/plugged'))
 Plug 'dracula/vim', { 'as': 'vim-dracula' }
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+"Plug 'autozimu/LanguageClient-neovim', {
+"    \ 'branch': 'next',
+"    \ 'do': 'bash install.sh',
+"    \ }
 Plug 'ionide/Ionide-vim', {
     \ 'do': 'dotnet tool install --global fsautocomplete',
     \ }

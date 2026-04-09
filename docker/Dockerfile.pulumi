@@ -1,7 +1,7 @@
 # Copyright 2026 dah4k
 # SPDX-License-Identifier: EPL-2.0
 
-FROM opensuse/leap:16.0
+FROM opensuse/tumbleweed:latest
 
 ## Restore man-pages and other documentation for Tumbleweed and/or Leap 16.0
 RUN rpm --erase zypp-excludedocs \
@@ -30,6 +30,7 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc \
         man-pages \
         man-pages-posix \
         patch \
+        plantuml \
         ripgrep \
         tree \
         vim \
