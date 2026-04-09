@@ -100,10 +100,10 @@ let DecodeTextFromBase64 (encodedText: string) : string =
 
 
 // Modified from https://khalidabuhakmeh.com/compress-strings-with-dotnet-and-csharp/
-let GzipText (plainText: string) : byte[] =
+let Gzip (bytes: byte[]) : byte[] =
     // HACK: Workaround .NET 10 missing all Gzip blocks for empty byte array.
-    // See Also https://github.com/dotnet/runtime/issues/122928
-    if plainText = "" then
+    // See Also https://github.com/dotnet/runtime/issues/122928 (2026)
+    if bytes.Length = 0 then
         let gzipEmpty: byte[] =
             [|
                 0x1Fuy; 0x8Buy; 0x08uy; 0x00uy; 0x00uy; 0x00uy; 0x00uy; 0x00uy;
@@ -112,20 +112,20 @@ let GzipText (plainText: string) : byte[] =
             |]
         gzipEmpty
     else
-        use inStream = new MemoryStream(Encoding.UTF8.GetBytes(plainText))
         use outStream = new MemoryStream()
         use gzStream = new GZipStream(outStream, CompressionMode.Compress)
-        inStream.CopyTo(gzStream)
+        gzStream.Write(bytes, 0, bytes.Length)
         gzStream.Close()
         outStream.ToArray()
 
 
-// Modified from https://ssojet.com/compression/compress-files-with-gzip-in-f/
-let GunzipBytes (bytes: byte[]) : string =
+// Modified from https://khalidabuhakmeh.com/compress-strings-with-dotnet-and-csharp/
+let Gunzip (bytes: byte[]) : byte[] =
     use inStream = new MemoryStream(bytes)
+    use outStream = new MemoryStream()
     use gzStream = new GZipStream(inStream, CompressionMode.Decompress)
-    use outStream = new StreamReader(gzStream, Encoding.UTF8)
-    outStream.ReadToEnd()
+    gzStream.CopyTo(outStream)
+    outStream.ToArray()
 
 
 let UploadFile (localPath: string, remotePath: string) : string =
