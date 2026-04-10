@@ -78,15 +78,14 @@ let GetParentAssemblies () =
     |> Seq.where (fun x -> x <> currentAssembly)
 
 
-let LoadEmbeddedFile (pathname: string) : string =
+let LoadEmbeddedFile (pathname: string) : byte[] =
     let assembly = GetParentAssemblies() |> Seq.head
     let name = assembly.GetName().Name
 
-    use stream =
-        assembly.GetManifestResourceStream($"{name}.{pathname.Replace('/', '.')}")
-
-    use streamReader = new StreamReader(stream, Encoding.UTF8)
-    streamReader.ReadToEnd()
+    use outStream = new MemoryStream()
+    use stream = assembly.GetManifestResourceStream($"{name}.{pathname.Replace('/', '.')}")
+    stream.CopyTo(outStream)
+    outStream.ToArray()
 
 
 let EncodeTextToBase64 (plainText: string) : string =
