@@ -21,7 +21,10 @@ let ``TC.1.100 - Embedded resource file is not empty`` () =
 
 [<Fact>]
 let ``TC.1.110 - Embedded resource file is from us`` () =
-    Assert.Matches("^from Scriptlet.Tests", LoadEmbeddedFile("Files/greetings.txt"))
+    let actual =
+        LoadEmbeddedFile("Files/greetings.txt") |> System.Text.Encoding.UTF8.GetString
+
+    Assert.Matches("^from Scriptlet.Tests", actual)
 
 [<Fact>]
 let ``TC.1.200 - UploadFile result contains HEREDOC`` () =
