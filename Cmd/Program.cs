@@ -10,7 +10,7 @@ class Program
     static void Main(string[] args)
     {
         Hello("World!");
-        Hello(LoadEmbeddedFile("Files/greetings.txt"));
+        Hello(System.Text.Encoding.UTF8.GetString(LoadEmbeddedFile("Files/greetings.txt")));
         Hello(UploadFile("Files/greetings.txt", "/tmp/test.txt"));
         Hello(UploadFileWithChangeMode("Files/greetings.txt", "/tmp/test.txt", "640"));
         Hello(InstallSystemdService("Files/greetings.txt"));
