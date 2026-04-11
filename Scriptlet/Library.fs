@@ -127,13 +127,15 @@ let Gunzip (bytes: byte[]) : byte[] =
     outStream.ToArray()
 
 
+let EncodeFile (pathname: string) : string =
+    LoadEmbeddedFile(pathname) |> Gzip |> System.Convert.ToBase64String
+
+
 let UploadFile (localPath: string, remotePath: string) : string =
     $$"""
     sudo mkdir --parents ${dirname {{remotePath}}}
 
-    cat <<'END_OF_HEREDOC_UPLOAD_FILE' | sudo tee {{remotePath}}
-    {{LoadEmbeddedFile(localPath)}}
-    END_OF_HEREDOC_UPLOAD_FILE
+    echo -n "{{EncodeFile(localPath)}}" | base64 -d | gunzip | sudo tee {{remotePath}}
     """
     |> deindent
 
