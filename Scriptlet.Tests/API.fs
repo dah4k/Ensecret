@@ -27,12 +27,12 @@ let ``TC.1.110 - Embedded resource file is from us`` () =
     Assert.Matches("^from Scriptlet.Tests", actual)
 
 [<Fact>]
-let ``TC.1.200 - UploadFile result contains HEREDOC`` () =
-    Assert.Matches("HEREDOC", UploadFile("Files/greetings.txt", "/tmp/test.txt"))
+let ``TC.1.200 - UploadFile result contains base64 -d | gunzip`` () =
+    Assert.Matches("base64 -d", UploadFile("Files/greetings.txt", "/tmp/test.txt"))
 
 [<Fact>]
-let ``TC.1.210 - UploadFileWithChangeMode result contains HEREDOC`` () =
-    Assert.Matches("HEREDOC", UploadFileWithChangeMode("Files/greetings.txt", "/tmp/test.txt", "640"))
+let ``TC.1.210 - UploadFileWithChangeMode result contains base64 -d | gunzip`` () =
+    Assert.Matches("base64 -d | gunzip", UploadFileWithChangeMode("Files/greetings.txt", "/tmp/test.txt", "640"))
 
 [<Fact>]
 let ``TC.1.211 - UploadFileWithChangeMode result contains chmod`` () =
